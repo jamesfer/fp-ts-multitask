@@ -1,7 +1,7 @@
 import { Traversable } from 'fp-ts/Array';
 import { pipe } from 'fp-ts/function';
 import { isSome } from 'fp-ts/Option';
-import { workerThreadExecutor } from './executors/workerThreadExecutor';
+import { workerThreadExecutor } from './executors/workerThread/workerThreadExecutor';
 import { map, of, parFMap } from './fp';
 
 const multitask = pipe(

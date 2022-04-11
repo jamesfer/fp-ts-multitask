@@ -30,6 +30,7 @@ export type MultitaskOperation<A> =
   | MultitaskParFMap<A>;
 
 export type Multitask<A> = NonEmptyArray<MultitaskOperation<any>>;
+
 export interface MultitaskX<A> {
   initial: any;
   operations: MultitaskOperation<any>[];
@@ -47,9 +48,9 @@ export function makeMultitaskAp<A, B>(f: MultitaskX<(a: A) => B>): MultitaskAp<B
   return { f, _tag: 'MultitaskAp' };
 }
 
-export function makeMultitaskPure<A>(value: A): MultitaskPure<A> {
-  return { value, _tag: 'MultitaskPure' };
-}
+// export function makeMultitaskPure<A>(value: A): MultitaskPure<A> {
+//   return { value, _tag: 'MultitaskPure' };
+// }
 
 export function makeMultitaskParFMap<M extends URIS, A, B>(
   traversable: Traversable1<M>,
@@ -57,8 +58,3 @@ export function makeMultitaskParFMap<M extends URIS, A, B>(
 ): MultitaskParFMap<B> {
   return { f, traversable, _tag: 'MultitaskParFMap' };
 }
-
-export const appendOperation = <B>(operation: MultitaskOperation<B>) => <A>(multitask: MultitaskX<A>): MultitaskX<B> => ({
-  initial: multitask.initial,
-  operations: [...multitask.operations, operation],
-})

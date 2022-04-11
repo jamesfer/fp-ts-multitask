@@ -5,9 +5,9 @@ import { absurd, flow, pipe } from 'fp-ts/function';
 import { fromArray, unprepend } from 'fp-ts/NonEmptyArray';
 import { fold, fold as foldO, none, Option, some } from 'fp-ts/Option';
 import { mapFst, mapSnd } from 'fp-ts/Tuple';
-import { map } from '../fp';
-import { Multitask, MultitaskOperation, MultitaskX } from '../model';
-import { makeTuple } from '../utils';
+import { map } from '../../fp';
+import { Multitask, MultitaskOperation, MultitaskX } from '../../model';
+import { makeTuple } from '../../utils';
 
 // function runInitialStage<A>(stage: MultitaskOperation<A>): A {
 //   if (stage._tag === 'MultitaskPure') {

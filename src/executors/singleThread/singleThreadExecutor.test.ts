@@ -1,7 +1,6 @@
 import { Traversable } from 'fp-ts/Array';
 import { pipe } from 'fp-ts/function';
-import { ap, map, of, parFMap } from '../fp';
-import { makeMultitaskMap, MultitaskX } from '../model';
+import { ap, map, of, parFMap } from '../../fp';
 import { singleThreadExecutor } from './singleThreadExecutor';
 
 describe('singleThreadExecutor', () => {
