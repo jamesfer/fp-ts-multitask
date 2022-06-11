@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "builde2e",
+  },
+  "include": [
+    "e2e/**/*"
+  ],
+  "exclude": []
+}

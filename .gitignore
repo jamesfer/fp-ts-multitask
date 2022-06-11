@@ -1,5 +1,6 @@
 # Compiled code
 /build
+/builde2e
 
 # IntelliJ
 .idea
@@ -36,3 +37,8 @@ node_modules/
 .yarn/install-state.gz
 .pnp.*
 
+# Coverage
+coverage
+
+# Mac files
+.DS_Store

@@ -1,6 +1,4 @@
-import { NonEmptyArray } from 'fp-ts/NonEmptyArray';
-
-export interface MultitaskPointer {
-  state: NonEmptyArray<[number, any]>;
-  value: any;
-}
+export * from './fp';
+export * from './model';
+export * from './executors/singleThread/singleThreadExecutor';
+export * from './executors/workerThread/workerThreadExecutor';

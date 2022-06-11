@@ -62,7 +62,11 @@ function startWorker(filename: string, workerData: WorkerPointer): Promise<any> 
 // If pointer is at Ap and there are more pointers -> this shouldn't occur
 
 
-const runStep = (filename: string) => ([parentPointers, [currentPointer, currentMultitask], childPointers]: StepState): Task<Either<StepState, any>> => {
+const runStep = (
+  filename: string
+) => (
+  [parentPointers, [currentPointer, currentMultitask], childPointers]: StepState,
+): Task<Either<StepState, any>> => {
   if (currentPointer.index >= currentMultitask.operations.length) {
     // Out of bounds
     return pipe(
@@ -167,7 +171,7 @@ function executeTaskAsMainThread<A>(filename: string, multitask: MultitaskX<A>):
 }
 
 function isWorkerPointer(a: unknown): a is WorkerPointer {
-  return a && typeof a === 'object' && Array.isArray(a['pointers']) && 'currentValue' in a;
+  return a && typeof a === 'object' && Array.isArray(a['pointers']) && 'value' in a;
 }
 
 function findWorkerStep(multitask: MultitaskX<any>, workerPointer: WorkerPointer): MultitaskOperation<any> {
@@ -558,4 +562,3 @@ export function workerThreadExecutor<A>(filename: string, task: MultitaskX<A>): 
 //     )),
 //   );
 // }
-

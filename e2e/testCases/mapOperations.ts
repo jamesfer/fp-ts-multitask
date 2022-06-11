@@ -1,8 +1,7 @@
 import { pipe } from 'fp-ts/function';
 import { getOrElse } from 'fp-ts/Option';
 import { Task } from 'fp-ts/Task';
-import { map, of } from '../../src/fp';
-import { workerThreadExecutor } from '../../src/executors/workerThread/workerThreadExecutor';
+import { map, of, workerThreadExecutor } from '../..';
 
 const task = pipe(
   of(1),
