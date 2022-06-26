@@ -1,6 +1,6 @@
 import { pipe } from 'fp-ts/function';
 import { getOrElse } from 'fp-ts/Option';
-import { Task } from 'fp-ts/Task';
+import { Task, map as mapT } from 'fp-ts/Task';
 import { map, of, workerThreadExecutor } from '../..';
 
 const task = pipe(
@@ -11,7 +11,7 @@ const task = pipe(
 
 const run: Task<any> = pipe(
   workerThreadExecutor(__filename, task),
-  getOrElse(() => () => Promise.resolve('')),
+  mapT(getOrElse(() => '')),
 );
 
 const mapOperationsResult = run();

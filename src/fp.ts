@@ -9,6 +9,7 @@ import {
   Multitask,
   MultitaskOperation, MultitaskX,
 } from './model';
+import { Task } from 'fp-ts/es6/Task';
 
 export const URI = 'Multitask';
 
@@ -25,27 +26,15 @@ const appendOperation = <B>(operation: MultitaskOperation<B>) => <A>(multitask: 
   operations: [...multitask.operations, operation],
 })
 
-export const of: Pointed1<URI>['of'] = initial => ({ initial, operations: [] });
+const _of: Pointed1<URI>['of'] = initial => ({ initial, operations: [] });
 
 const _map: Functor1<URI>['map'] = (ma, f) => appendOperation(makeMultitaskMap(f))(ma);
 
-const _ap: Applicative1<URI>['ap'] = <A, B>(mab: MultitaskX<(a: A) => B>, ma: MultitaskX<A>) =>
-  appendOperation(makeMultitaskAp(mab))(ma);
-
-export const map = <A, B>(f: (a: A) => B) => (ma: MultitaskX<A>): MultitaskX<B> => _map(ma, f);
-export const ap = <A>(ma: MultitaskX<A>) => <B>(mab: MultitaskX<(a: A) => B>): MultitaskX<B> => _ap(mab, ma);
-
-export const parFMap = <M extends URIS>(
-  traversable: Traversable1<M>,
-) => <A, B>(
-  f: (a: A) => B,
-) => (
-  ma: MultitaskX<Kind<M, A>>
-): MultitaskX<Kind<M, B>> => appendOperation(makeMultitaskParFMap(traversable, f))(ma);
+const _ap: Applicative1<URI>['ap'] = (mab, ma) => appendOperation(makeMultitaskAp(mab))(ma);
 
 export const Pointed: Pointed1<URI> = {
   URI,
-  of,
+  of: _of,
 }
 
 export const Functor: Functor1<URI> = {
@@ -55,7 +44,19 @@ export const Functor: Functor1<URI> = {
 
 export const Applicative: Applicative1<URI> = {
   URI,
-  of,
+  of: _of,
   map: _map,
   ap: _ap
 }
+
+export const of = _of;
+export const map = <A, B>(f: (a: A) => B) => (ma: MultitaskX<A>): MultitaskX<B> => _map(ma, f);
+export const ap = <A>(ma: MultitaskX<A>) => <B>(mab: MultitaskX<(a: A) => B>): MultitaskX<B> => _ap(mab, ma);
+
+export const parFMap = <M extends URIS>(
+  traversable: Traversable1<M>,
+) => <A, B>(
+  f: (a: A) => Task<B>,
+) => (
+  ma: MultitaskX<Kind<M, A>>
+): MultitaskX<Kind<M, B>> => appendOperation(makeMultitaskParFMap(traversable, f))(ma);

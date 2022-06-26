@@ -1,6 +1,7 @@
 import { URIS } from 'fp-ts/HKT';
 import { NonEmptyArray } from 'fp-ts/NonEmptyArray';
 import { Traversable1 } from 'fp-ts/Traversable';
+import { Task } from 'fp-ts/es6/Task';
 
 export interface MultitaskMap<A> {
   readonly _tag: 'MultitaskMap';
@@ -20,7 +21,7 @@ export interface MultitaskPure<A> {
 export interface MultitaskParFMap<A> {
   readonly _tag: 'MultitaskParFMap';
   readonly traversable: Traversable1<any>;
-  f(a: any): A;
+  f(a: any): Task<A>;
 }
 
 export type MultitaskOperation<A> =
@@ -54,7 +55,7 @@ export function makeMultitaskAp<A, B>(f: MultitaskX<(a: A) => B>): MultitaskAp<B
 
 export function makeMultitaskParFMap<M extends URIS, A, B>(
   traversable: Traversable1<M>,
-  f: (a: A) => B,
+  f: (a: A) => Task<B>,
 ): MultitaskParFMap<B> {
   return { f, traversable, _tag: 'MultitaskParFMap' };
 }

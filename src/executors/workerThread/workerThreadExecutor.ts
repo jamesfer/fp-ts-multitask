@@ -190,7 +190,7 @@ function findWorkerStep(multitask: MultitaskX<any>, workerPointer: WorkerPointer
   )
 }
 
-function executeTaskAsWorker<A>(task: MultitaskX<any>): A {
+function executeTaskAsWorker<A>(task: MultitaskX<any>): Task<A> {
   const workerPointer = workerData;
   if (!isWorkerPointer(workerPointer)) {
     const dataString = JSON.stringify(workerPointer, undefined, 2);
@@ -205,22 +205,27 @@ function executeTaskAsWorker<A>(task: MultitaskX<any>): A {
   return operation.f(workerPointer.value);
 }
 
-function sendResultToParentThread(f: () => any): void {
+async function sendResultToParentThread<A>(f: Task<A>): Promise<void> {
   try {
-    const result = f();
+    const result = await f();
     parentPort.postMessage(right(result));
   } catch (error) {
     parentPort.postMessage(left(error));
   }
 }
 
-export function workerThreadExecutor<A>(filename: string, task: MultitaskX<A>): Option<Task<A>> {
+export function workerThreadExecutor<A>(filename: string, task: MultitaskX<A>): Task<Option<A>> {
   if (isMainThread) {
-    return some(executeTaskAsMainThread(filename, task));
+    return pipe(
+      executeTaskAsMainThread(filename, task),
+      mapT(some),
+    );
   }
 
-  sendResultToParentThread(() => executeTaskAsWorker(task));
-  return none;
+  return async () => {
+    await sendResultToParentThread<A>(executeTaskAsWorker(task));
+    return none;
+  };
 }
 
 

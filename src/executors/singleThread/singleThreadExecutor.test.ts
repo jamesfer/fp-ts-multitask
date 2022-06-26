@@ -1,5 +1,6 @@
 import { Traversable } from 'fp-ts/Array';
 import { pipe } from 'fp-ts/function';
+import { of as ofT } from 'fp-ts/Task';
 import { ap, map, of, parFMap } from '../../fp';
 import { singleThreadExecutor } from './singleThreadExecutor';
 
@@ -30,7 +31,7 @@ describe('singleThreadExecutor', () => {
   it('can execute parFMap operations', async () => {
     const task = pipe(
       of([1, 2, 3]),
-      parFMap(Traversable)(n => n + 1),
+      parFMap(Traversable)(n => ofT(n + 1)),
     );
     const run = singleThreadExecutor(task);
     expect(await run()).toEqual([2, 3, 4]);
@@ -42,7 +43,7 @@ describe('singleThreadExecutor', () => {
       map((prefix: string) => (x: number) => `${prefix}: ${x}`),
       ap(pipe(
         of([1, 2, 3]),
-        parFMap(Traversable)(n => n + 1),
+        parFMap(Traversable)(n => ofT(n + 1)),
         map(array => array.reduce((a, b) => a + b)),
       )),
     );
@@ -51,13 +52,13 @@ describe('singleThreadExecutor', () => {
   });
 
   it('runs parFMap tasks in order', async () => {
-    const input = Array(1e5).fill(0).map((_, index) => index);
+    const input = Array(1e4).fill(0).map((_, index) => index);
     const output = [];
     const task = pipe(
-      of(Array(1e5).fill(0).map((_, index) => index)),
+      of(Array(1e4).fill(0).map((_, index) => index)),
       parFMap(Traversable)((n) => {
         output.push(n);
-        return n;
+        return ofT(n);
       }),
     );
     const run = singleThreadExecutor(task);

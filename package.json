@@ -7,7 +7,7 @@
     "build": "tsc",
     "build:e2e": "tsc --project tsconfig.e2e.json",
     "test": "jest",
-    "test:e2e": "jest --project jest.e2e.config.ts"
+    "test:e2e": "jest --config jest.e2e.config.ts"
   },
   "dependencies": {
     "fp-ts": "^2.11.4",
