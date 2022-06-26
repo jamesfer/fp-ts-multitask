@@ -1,0 +1,15 @@
+name: CI
+on: push
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 18
+      - run: yarn install
+      - run: yarn test
+      - run: yarn build
+      - run: yarn build:e2e
+      - run: yarn test:e2e
