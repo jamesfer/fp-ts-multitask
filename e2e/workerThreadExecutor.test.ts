@@ -1,11 +1,8 @@
-import { Traversable } from 'fp-ts/Array';
-import { pipe } from 'fp-ts/function';
 import apOperationsResult from './testCases/apOperations';
 import mapOperationsResult from './testCases/mapOperations';
 import parFMapOperationsResult from './testCases/parFMapOperations';
-import { getOrElse } from 'fp-ts/Option';
-import * as path from 'path';
 import parFMapLargeOperationResult from './testCases/parFMapLargeOperations';
+import parFMapSleepOperationsResult from './testCases/parFMapSleepOperations';
 
 describe('workerThreadExecutor', () => {
   it('can execute map operations', async () => {
@@ -22,6 +19,10 @@ describe('workerThreadExecutor', () => {
 
   it('can execute a highly parallel parFMap operation', async () => {
     expect(await parFMapLargeOperationResult).toEqual(Array(100).fill(3));
+  });
+
+  it('can execute slow tasks in parallel', async () => {
+    expect(await parFMapSleepOperationsResult).toBeLessThan(5000);
   });
 
   // it('can execute parFMap operations inside an ap operation', async () => {
