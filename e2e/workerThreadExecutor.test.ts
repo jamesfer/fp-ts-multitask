@@ -1,8 +1,10 @@
+import { uniq } from 'fp-ts/Array';
+import { Eq as EqNumber } from 'fp-ts/number';
 import apOperationsResult from './testCases/apOperations';
 import mapOperationsResult from './testCases/mapOperations';
 import parFMapOperationsResult from './testCases/parFMapOperations';
 import parFMapLargeOperationResult from './testCases/parFMapLargeOperations';
-import parFMapSleepOperationsResult from './testCases/parFMapSleepOperations';
+import parFMapThreadOperationsResult from './testCases/parFMapThreadOperations';
 
 describe('workerThreadExecutor', () => {
   it('can execute map operations', async () => {
@@ -21,8 +23,10 @@ describe('workerThreadExecutor', () => {
     expect(await parFMapLargeOperationResult).toEqual(Array(100).fill(3));
   });
 
-  it('can execute slow tasks in parallel', async () => {
-    expect(await parFMapSleepOperationsResult).toBeLessThan(5000);
+  it('can execute all tasks in separate threads', async () => {
+    const threadIds = await parFMapThreadOperationsResult;
+    const uniqueThreadIds = uniq(EqNumber)(threadIds);
+    expect(uniqueThreadIds).toHaveLength(10);
   });
 
   // it('can execute parFMap operations inside an ap operation', async () => {
