@@ -21,7 +21,7 @@ describe('workerThreadExecutor', () => {
 
   it('can execute a highly parallel parFMap operation', async () => {
     expect(await parFMapLargeOperationResult).toEqual(Array(100).fill(3));
-  });
+  }, 10_000);
 
   it('can execute all tasks in separate threads', async () => {
     const threadIds = await parFMapThreadOperationsResult;
